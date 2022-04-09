@@ -1,6 +1,6 @@
-# noom_app2
+# noom application 
 
-A new Flutter project.
+Flutter project.
 
 ## Getting Started
 
