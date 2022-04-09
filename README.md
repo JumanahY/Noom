@@ -12,8 +12,13 @@ the database we used is mysql. so we used php language to connect the Database w
 ## Launching instructions 
 
 1- Computer with installed Fluuter
+
 2- open the project with Android studio or Visual Studio 
+
 3- open android simulator using AVD manager in Android Studio 
+
 4- open terminal 
+
 5- write "flutter run"
+
 6- the app should launch now in the simulator 
