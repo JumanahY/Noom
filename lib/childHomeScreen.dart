@@ -99,40 +99,6 @@ class _ChildHomeScreenState extends State<ChildHomeScreen> {
                 ),
                 ListTile(
                   leading: Icon(
-                    Icons.add_circle,
-                    color: Colors.lightBlue,
-                    size: 34,
-                  ),
-                  title: Text(
-                    "A",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                  onTap: () {
-                    /// Navigator.pushNamed(context, "/addNewChild");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.view_module,
-                    color: Colors.lightBlue,
-                    size: 34,
-                  ),
-                  title: Text(
-                    "B",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                  onTap: () {
-                    //Navigator.pushNamed(context, "/viewMyChildern");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
                     Icons.admin_panel_settings_sharp,
                     color: Colors.lightBlue,
                     size: 34,

@@ -1,89 +1,59 @@
-// ignore_for_file: deprecated_member_use, unused_local_variable
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class ChildLoginScreen extends StatefulWidget {
-  const ChildLoginScreen({Key key}) : super(key: key);
+class ParentForgetPass extends StatefulWidget {
+  const ParentForgetPass({Key key}) : super(key: key);
 
   @override
-  _ChildLoginScreenState createState() => _ChildLoginScreenState();
+  State<ParentForgetPass> createState() => _ParentForgetPassState();
 }
 
-class _ChildLoginScreenState extends State<ChildLoginScreen> {
+class _ParentForgetPassState extends State<ParentForgetPass> {
   final formKey = GlobalKey<FormState>();
   final snackBarScafflod = GlobalKey<ScaffoldState>();
   TextEditingController user = new TextEditingController();
-  TextEditingController pass = new TextEditingController();
-
-  var username = "";
-  dynamic child_id = 0;
 
   @override
   void dispose() {
     super.dispose();
     user.dispose();
-    pass.dispose();
   }
 
   void ClearInputs() {
     user.clear();
-    pass.clear();
   }
 
-  Future<List> _login() async {
-    final response =
-        await http.post("http://10.0.2.2/api/noom_app/ChildLogin.php", body: {
-      "username": user.text,
-      "password": pass.text,
-    });
+  Future<List> _forget() async {
+    final response = await http.post(
+        "http://10.0.2.2/api/noom_app/ParentForget.php",
+        body: {"username": user.text});
     print(response.body);
     var userData = json.decode(response.body);
-    if (userData.length == 0) {
+    if (userData.length != 0) {
       snackBarScafflod.currentState.showSnackBar(SnackBar(
-        content: Text("انت غير مخول لك الدخول",
+        content: Text("تم ارسال كلمة المرور على البريد الالكتروني الخاص بك",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.green[800],
+      ));
+
+      FocusScope.of(context).unfocus();
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.pushNamed(context, '/parentOptions');
+      });
+    } else {
+      ClearInputs();
+      snackBarScafflod.currentState.showSnackBar(SnackBar(
+        content: Text("البيانات غير موجودة",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
         duration: Duration(seconds: 3),
         backgroundColor: Colors.red[800],
       ));
-      ClearInputs();
-      FocusScope.of(context).unfocus();
-    } else {
-      SharedPreferences parentLoggedInCheck =
-          await SharedPreferences.getInstance();
-      setState(() {
-        username = userData[0]['username'];
-        child_id = userData[0]['child_id'];
-
-        print("LOGIN child_id = ${child_id}");
-        snackBarScafflod.currentState.showSnackBar(SnackBar(
-          content: Text("اهلا بك حساب الطفل",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-          duration: Duration(seconds: 3),
-          backgroundColor: Colors.green[800],
-        ));
-
-        parentLoggedInCheck.setString("parent_username", username);
-        int id = int.parse(child_id);
-        print(child_id.runtimeType);
-        var c = int.parse(child_id);
-        print("C = ${c}");
-        print(c.runtimeType);
-        parentLoggedInCheck.setInt("child_id", c);
-
-        Future.delayed(Duration(seconds: 2), () {
-          print("Ok logged in");
-
-          Navigator.pushNamed(context, '/childHomeScreen');
-        });
-      });
-      ////
-
     }
     return userData;
   }
@@ -102,7 +72,7 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
           backgroundColor: Colors.white,
           leading: IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/loginOptions');
+                Navigator.pop(context);
               },
               icon: Icon(
                 Icons.arrow_back_ios,
@@ -110,7 +80,7 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                 color: Colors.lightBlueAccent,
               )),
           title: Text(
-            "تسجيل الدخول - الطفل",
+            "استرجاع كلمة المرور",
             style: TextStyle(color: Colors.lightBlueAccent),
           ),
         ),
@@ -130,7 +100,7 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "اهلا بك - الطفل!",
+                        "ادخل اسم المستخدم الخاص بك !",
                         style: TextStyle(
                           fontSize: 30,
                           color: Colors.lightBlue,
@@ -138,10 +108,10 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                         textAlign: TextAlign.left,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 50,
                       ),
                       Image(
-                        image: AssetImage('images/noomLogo.png'),
+                        image: AssetImage('images/forget.png'),
                         height: 180.0,
                       ),
                       SizedBox(
@@ -149,7 +119,7 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                       ),
                       TextFormField(
                         controller: user,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.right,
                         decoration: InputDecoration(
                           labelText: "اسم المستخدم",
                           labelStyle: TextStyle(color: Colors.blueGrey),
@@ -183,39 +153,6 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      TextFormField(
-                        controller: pass,
-                        textAlign: TextAlign.left,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: "كلمة المرور",
-                          labelStyle: TextStyle(color: Colors.blueGrey),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 3,
-                              color: Colors.blueGrey,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 3,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 2,
-                              color: Colors.lightBlueAccent,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "* نسيت ادخال كلمة المرور";
-                          }
-                          return null;
-                        },
-                      ),
                       SizedBox(
                         height: 80,
                       ),
@@ -226,13 +163,13 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                         ),
                         onPressed: () {
                           if (formKey.currentState.validate()) {
-                            _login();
+                            _forget();
                           }
                         },
                         color: Colors.lightBlueAccent,
                         child: Container(
                           child: Text(
-                            "دخول الان!",
+                            "استرجاع الان",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -246,19 +183,6 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
                       ),
                       SizedBox(
                         height: 60,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          print("forget");
-                          Navigator.pushNamed(context, "/childForgetPass");
-                        },
-                        child: Container(
-                          child: Text(
-                            "استرجاع كلمة المرور",
-                            style: TextStyle(
-                                fontSize: 25, color: Colors.lightBlue),
-                          ),
-                        ),
                       ),
                       SizedBox(
                         height: 30,

@@ -145,7 +145,7 @@ class _ChildDetailsState extends State<ChildDetails> {
                   style: TextStyle(fontSize: 30.0, color: Colors.lightBlue),
                 ),
                 Text(
-                  widget.child_username.toString() + " سنة ",
+                  widget.child_username.toString(),
                   style: TextStyle(
                     fontSize: 30.0,
                   ),

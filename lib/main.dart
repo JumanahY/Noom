@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 
 import 'addNewChild.dart';
 import 'childChangePassword.dart';
+import 'childForgetPass.dart';
 import 'childDetails.dart';
 import 'childHomeScreen.dart';
 import 'childLoginScreen.dart';
 import 'loginOptions.dart';
 import 'parentHomeScreen.dart';
+import 'parentForgetPass.dart';
 import 'parentLoginScreen.dart';
 import 'parentOptions.dart';
 import 'parentRegisterScreen.dart';
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
           "/parentLoginScreen": (context) => new ParentLoginScreen(),
           "/parentRegisterScreen": (context) => new ParentRegisterScreen(),
           "/parentHomeScreen": (context) => new ParentHomeScreen(),
+          "/parentForgetPass": (context) => new ParentForgetPass(),
           "/addNewChild": (context) => new AddNewChild(),
           "/viewMyChildern": (context) => new ViewMyChildern(),
           "/childDetails": (context) => new ChildDetails(),
@@ -48,6 +51,7 @@ class MyApp extends StatelessWidget {
           "/childChangePassword": (context) => new ChildChangePassword(
                 child_id: child_id,
               ),
+          "/childForgetPass": (context) => new ChildForgetPass(),
         });
   }
 }

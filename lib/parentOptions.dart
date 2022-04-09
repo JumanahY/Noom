@@ -110,7 +110,19 @@ class _ParentOptionsState extends State<ParentOptions> {
                     ),
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 60,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print("forget");
+                      Navigator.pushNamed(context, "/parentForgetPass");
+                    },
+                    child: Container(
+                      child: Text(
+                        "استرجاع كلمة المرور",
+                        style: TextStyle(fontSize: 25, color: Colors.lightBlue),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 30,
