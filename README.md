@@ -11,7 +11,7 @@ the database we used is mysql. so we used php language to connect the Database w
 
 ## Launching instructions 
 
-1- Computer with installed Fluuter
+1- Computer with installed Flutter
 
 2- open the project with Android studio or Visual Studio 
 
