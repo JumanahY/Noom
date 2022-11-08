@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Future.delayed(d, () {
       Navigator.pushNamed(context, "/loginOptions");
     });
+   
     super.initState();
   }
 

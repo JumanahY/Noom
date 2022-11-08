@@ -1,25 +1,41 @@
-import 'package:noom_app2/parentChangePassword.dart';
+import 'package:noom_app2/parent/parentChangePassword.dart';
 import 'package:noom_app2/welcomeScreen.dart';
 import 'package:flutter/material.dart';
-
-import 'addNewChild.dart';
-import 'childChangePassword.dart';
-import 'childForgetPass.dart';
-import 'childDetails.dart';
-import 'childHomeScreen.dart';
-import 'childLoginScreen.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'child/addNewChild.dart';
+import 'child/childChangePassword.dart';
+import 'child/childForgetPass.dart';
+import 'child/childDetails.dart';
+import 'child/childHomeScreen.dart';
+import 'child/childLoginScreen.dart';
 import 'loginOptions.dart';
-import 'parentHomeScreen.dart';
-import 'parentForgetPass.dart';
-import 'parentLoginScreen.dart';
-import 'parentOptions.dart';
-import 'parentRegisterScreen.dart';
-import 'viewMyChildern.dart';
+import 'parent/parentHomeScreen.dart';
+import 'parent/parentForgetPass.dart';
+import 'parent/parentLoginScreen.dart';
+import 'parent/parentOptions.dart';
+import 'parent/parentRegisterScreen.dart';
+import 'child/viewMyChildern.dart';
 
 String parent_id = "";
 String child_id = "";
 
 void main() {
+  AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+    // 'resource://drawable/codex_logo',
+    null,
+    [
+      NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          importance: NotificationImportance.High,
+          channelShowBadge: true,
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.white)
+    ],
+  );
+
   runApp(MyApp());
 }
 
@@ -48,6 +64,7 @@ class MyApp extends StatelessWidget {
               ),
           "/childLoginScreen": (context) => new ChildLoginScreen(),
           "/childHomeScreen": (context) => new ChildHomeScreen(),
+         
           "/childChangePassword": (context) => new ChildChangePassword(
                 child_id: child_id,
               ),
