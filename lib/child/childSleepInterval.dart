@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'updateSleepInterval.dart';
-import 'package:tflite/tflite.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 
 class ChildSleepInterval extends StatefulWidget {
@@ -29,6 +29,8 @@ class _ChildSleepIntervalState extends State<ChildSleepInterval> {
   final DateTime end_d=DateTime.now();        //tril
   var predValue = "";
   int start_date,end_date, sd,ed, timeInBed;
+
+  get predData => null;
   void initState() {
     super.initState();
     predValue = "click predict model button";
@@ -36,12 +38,21 @@ class _ChildSleepIntervalState extends State<ChildSleepInterval> {
     //check();
     fetchChlidSleeps(widget.child_id);
 
-
-     
+     loadModel().then((value) {
+          setState(() {
+            loading = false;
+          });
+        });
   }
 
 
+  //load model from assests directory
+ // loadModel() async {
+ //     await Tflite.loadModel(
+  //      model: "assests/model.tflite",
 
+   //   );
+   // }
 
     // preprocess for data, input start and end to sleep interval and rate colucos
      preprocessing() async {
@@ -57,30 +68,34 @@ class _ChildSleepIntervalState extends State<ChildSleepInterval> {
      //int slpq=sleepQaulty.toInt();
      glucose=95;   // the gulcose input from user
 
-    //    classify(sleepQaulty,glucose,timeInBed,sd,ed);
+        classify(sleepQaulty,glucose,timeInBed,sd,ed);
         }
      // classify
     Future classify(int sleepQaulty,int glucose, int timeInBed, int sd,int ed) async{
      var input=[
      [sleepQaulty, glucose,timeInBed, sd,ed] ];
 
-       // final interpreter = await Interpreter.fromAsset('model.tflite');
+        final interpreter = await Interpreter.fromAsset('model.tflite');
 
-      //      var output = List.filled(1, 0).reshape([1, 1]);
-      //      interpreter.run(input, output);
-        //    print(output[0][0]);
+            var output = List.filled(1, 0).reshape([1, 1]);
+            interpreter.run(input, output);
+            print(output[0][0]);
 
-        //   this.setState(() {
-          //    predValue = output[0][0].toString();
-         //     loading = false;
-         //   });
+            this.setState(() {
+              predValue = output[0][0].toString();
+              loading = false;
+            });
 
      }
 
+    // close tflite
+   // void dispose(){
+   //   Tflite.close();
+    //  super.dispose();
 
+   // }
 
   Future<List> fetchChlidSleeps(child_id) async {
-
     String id = child_id;
     print("ID => ${id.toString()}");
     print("---------------------------------");
@@ -249,7 +264,34 @@ class _ChildSleepIntervalState extends State<ChildSleepInterval> {
                                         ],
                                       ),
                                       /////////////////////////
-                                    
+                                      Row(
+                                         mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                             children: [
+                                                   Text(
+                                                     "change the input values in code to get the prediction",
+                                                      style: TextStyle(
+                                                       fontSize: 20,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: Colors.lightBlue),
+                                                         ),
+                                                        Text(
+
+                                                          "predict",
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                           fontWeight: FontWeight.w500,
+                                                            color: Colors.lightBlue),
+                                                             onPressed: predData,
+                                                            ),
+                                                           SizedBox(height: 12),
+                                                            Text(
+                                                              "Predicted value :  $predValue ",
+                                                               style: TextStyle(color: Colors.red, fontSize: 23),
+                                                        ),
+
+                                                     ],
+                                              ),/////////////
                                     ],
                                   ),
                                 ),
@@ -264,4 +306,6 @@ class _ChildSleepIntervalState extends State<ChildSleepInterval> {
                 ),
         ));
   }
+
+  loadModel() {}
 }
